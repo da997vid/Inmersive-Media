@@ -83,6 +83,8 @@
                     <br/>
 
                     <select id="input_select_rooms" onchange="getRoomJoin()"></select>
+                    <select id="input_users_rooms"></select>
+
                     <br/>
                     <br/>
 
@@ -182,6 +184,8 @@
 
         function getRoomJoin(){
             room_selected = document.getElementById('input_select_rooms').value;
+
+            // socket.emit('set room selected', room_selected);
         }
 
         socket.on('get rooms', function(data) {
@@ -215,7 +219,6 @@
         }
 
 
-
         $(function() {
             var $createOrJoinArea = $('#createOrJoinArea');
             var $roomArea = $('#roomArea');
@@ -236,6 +239,7 @@
             var $video_list = $('#video_list');
             var $rooms = $('#rooms');
             var $input_select_rooms = $('#input_select_rooms');
+            var $input_users_rooms = $('#input_users_rooms');
 
 
 
@@ -261,15 +265,19 @@
                 $createOrJoinArea.hide();
                 $joinRoomArea.show();
 
-                var htmlrooms = '';
                 var htmlrooms_select = ''
                 htmlrooms_select += '<option value="">Seleccionar Sala</option>';
                 for (i = 0; i < rooms_array.length; i++) {
-                    // htmlrooms += '<li style="padding-right: 10em;" class="list-group-item chat-users"><a href="#" onClick="getRoomJoin('+ rooms_array[i] +');">' + rooms_array[i] + '</a></li>';
                     htmlrooms_select += '<option value="' + rooms_array[i] + '">' + rooms_array[i] + '</option>';
                 }
-                // $rooms.html(htmlrooms);
                 $input_select_rooms.html(htmlrooms_select);
+
+                var htmlusers_room = ''
+                htmlusers_room += '<option value="">Uusarios Conectados</option>';
+                for (i = 0; i < users_array.length; i++) {
+                    htmlusers_room += '<option value="' + users_array[i] + '">' + users_array[i] + '</option>';
+                }
+                $input_users_rooms.html(htmlusers_room);
 
             });
 
@@ -368,6 +376,8 @@
 
                 $users.html(htmlUsers)
             });
+
+            
 
             // Webcam Tools
             var connection = new RTCMultiConnection();

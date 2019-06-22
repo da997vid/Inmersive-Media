@@ -12,6 +12,7 @@ userrooms = {}
 
 // Set given room for url parameter
 var given_room = ""
+var actual_socket_room = ""
 
 app.use(express.static(__dirname + '/'));
 
@@ -142,7 +143,9 @@ io.sockets.on('connection', function(socket) {
         }
         
         // Update online users
-        updateRoomUsers(socket.roomnum)
+        updateRoomUsers(socket.roomnum);
+        actual_socket_room = socket.roomnum;
+        
 
         //Chat Function
         socket.on('set emoji', function(data){
@@ -154,8 +157,9 @@ io.sockets.on('connection', function(socket) {
 
     if ( connections.length > 1) {
         //Update Room List
-        updateRoomList(rooms)
-        getUsersConnected(users)
+        updateRoomList(rooms);
+        console.log("ROOOOOOOOOOOOOM: " + actual_socket_room);
+        getUsersConnected(actual_socket_room);
     }
 
 
@@ -229,10 +233,11 @@ io.sockets.on('connection', function(socket) {
         }
     }
 
-    function getUsersConnected(users) {
-        if (users.length > 0){
-            socket.emit('get users room', users);
-            console.log("Get Users on Room Connected: " + users);
+    function getUsersConnected(roomnum) {
+        if (roomnum.length > 0){
+            var roomUsers = io.sockets.adapter.rooms['room-' + roomnum].users
+            socket.emit('get users room', roomUsers);
+            console.log("Get Users on Room Connected: " + roomUsers);
         }
     }
     
