@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+
+    <meta charset="utf-8">
+
+    <title>Video Sincronizado</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- JQuery -->
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <!-- Socket.io -->
+    <script src="/socket.io/socket.io.js"></script>
+
+
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/html5player.css" rel="stylesheet">
+    <link href="css/faceMocion.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body class="bg-light" id="Home">
+
+    <!-- Page Content -->
+    <div class="container">
+
+        <!-- First Page Choice -->
+        <div id="createOrJoinArea" class="row">
+            <div class="col-md-12">
+                <form id="createForm">
+                    <input style="margin-top: 10px;" type="submit" class="btn btn-primary" value="Create Room" />
+                </form>
+                <form id="joinForm">
+                    <input style="margin-top: 10px;" type="submit" class="btn btn-primary" value="Join Room" />
+                </form>
+            </div>
+        </div>
+
+        <!-- Create Room Area -->
+        <div id="createRoomArea" class="row">
+            <div class="col-md-12">
+                <form id="createRoomForm">
+                    <h2> ¡Create Room! </h2>
+                    <label>User Name</label>
+                    <input class="form-control" id="username" />
+                    <br />
+
+                    <label>Room Name</label>
+                    <br/>
+                    <input class="form-control" id="roomnum" />
+                    <br/>
+
+                    <label>Video</label>
+                    <br />
+                    <select id="video_list" onchange="changeVideo();">
+                        <option value="" disabled selected style="display:none;">Select Video</option>
+                        <option value="video1">Video 1</option>
+                        <option value="video2">Video 2</option>
+                        <option value="video3">Video 3</option>
+                        <option value="video4">Video 4</option>
+                    </select>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <input style="margin-top: 10px;" type="submit" class="btn btn-primary" value="Create Room"/>
+                </form>
+            </div>
+        </div>
+
+        <!-- Join in a Room Area -->
+        <div id="joinRoomArea" class="row">
+            <div class="col-md-12">
+                <form id="joinRoomForm">
+                    <h2> ¡Join Room! </h2>
+                    <label>User Name</label>
+                    <input class="form-control" id="username_form" />
+                    <br />
+
+                    <label>Rooms</label>
+                    <br/>
+
+                    <select id="input_select_rooms" onchange="getRoomJoin()"></select>
+                    <br/>
+                    <br/>
+
+                    <input style="margin-top: 10px;" type="submit" class="btn btn-primary" value="Join Room" />
+                    <br/>
+                    <br/>
+                </form>
+
+            </div>
+        </div>
+
+            <!-- User Form (First Page) -->
+        <div id="userFormArea" class="row">
+            <div class="col-md-12">
+
+                <h2> ¡Videos Sincronizados! </h2>
+                <form id="userForm">
+                    <div class="form-group">
+
+                        <label>Nombre</label>
+                        <input class="form-control" id="username" />
+                        <br />
+                        <label>Sala</label>
+                        <br/>
+                        <input class="form-control" id="roomnum" />
+                        <br/>
+
+                        <input style="margin-top: 10px;" type="submit" class="btn btn-primary" value="Entrar" />
+                    </div>
+                </form>
+                
+            </div>
+        </div>
+
+
+        <div id="roomArea">
+            <!-- Heading Row -->
+            <div class="row my-4" style="margin-top: 0px !important;">
+                <div class="col-lg-7">
+                    <!----------------------------------- PLAYER AREA ----------------------------------->
+
+                    <div id='playerArea'>
+                        <div class="video" id="player"></div>
+                   </div>
+                    <div id='HTML5Area'>
+                        <div class="html5player">
+                            <video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" class="video_360" id="video1" controls>
+                            </video>
+                            <video src="http://haignet.co.uk/html5-video-element-test.mp4" class="video_360" id="video2" controls>
+                            </video>
+
+                        </div>
+                    </div>
+
+                    <!----------------------------------- PLAYER AREA ----------------------------------->
+                    <div>
+                        <button id="playButton" onclick="playVideo(roomnum)" style="margin-top:.5rem" class="btn btn-primary"><i class="fa fa-play"></i> Play / <i class="fa fa-pause"></i> Pause</button>
+                    </div>
+
+
+                </div>
+
+                
+                <div class="col-lg-5">
+                    <h5 class="right-header">Usuarios en linea</h5>
+                    <hr style="height:0pt; visibility:hidden;" />
+
+                    <div class="col-md-13">
+                        <div class="well online-users noscrollbar">
+                            <ul class="list-group" id="users"></ul>
+                        </div>
+
+                    </div>
+                </div> 
+                <!-- <input type="hidden" value="amo" id="input_emoji"/> -->
+                <input type="image" id="emoji_reaction" value="amo" src="css/icons/amo.png" alt="Submit" width="48" height="48" onmouseover="showReactions()" onmouseout="hideReactions()">
+                <div id="emojis" style="visibility: hidden;" onmouseover="showReactions()" onmouseout="hideReactions()">
+                    <input type="image" id="emoji_amo" value="amo" src="css/icons/amo.png" alt="Submit" width="48" height="48" onclick=chooseIcon(this)>
+                    <input type="image" id="emoji_crying" value="crying" src="css/icons/crying.png" alt="Submit" width="48" height="48" onclick=chooseIcon(this)>
+                    <input type="image" id="emoji_angry" value="angry" src="css/icons/angry.png" alt="Submit" width="48" height="48" onclick=chooseIcon(this)>
+                    <input type="image" id="emoji_sad" value="sad" src="css/icons/sad.png" alt="Submit" width="48" height="48" onclick=chooseIcon(this)>
+                </div>
+            </div>
+            
+        </div>
+
+
+    <script>
+        var socket = io.connect();
+        var roomnum = 1
+        var username = ""
+        var username_form = ""
+        var room_selected = ""
+        var $usersJoin = $('#usersJoin');
+        rooms_array = []
+
+        function getRoomJoin(){
+            room_selected = document.getElementById('input_select_rooms').value;
+        }
+
+        socket.on('get rooms', function(data) {
+            for (i = 0; i < data.length; i++) {
+                rooms_array.push(data[i]);
+            }
+
+        });
+
+        function showReactions() {
+            document.getElementById('emojis').style.visibility = "visible";
+        }
+
+        function hideReactions() {
+            document.getElementById('emojis').style.visibility = "hidden";
+        }
+
+        function chooseIcon(x) {
+            emoji = document.getElementById('emoji_reaction')
+            emoji.src = x.src;
+            emoji.value = x.value
+
+            socket.emit('set emoji', emoji.src);
+        }
+
+
+
+        $(function() {
+            var $createOrJoinArea = $('#createOrJoinArea');
+            var $roomArea = $('#roomArea');
+            var $userFormArea = $('#userFormArea');
+            var $createRoomArea = $('#createRoomArea');
+            var $joinRoomArea = $('#joinRoomArea');
+
+            var $createForm = $('#createForm');
+            var $joinForm = $('#joinForm');
+            var $createRoomForm = $('#createRoomForm');
+            var $userForm = $('#userForm');
+            var $joinRoomForm = $('#joinRoomForm');
+
+            var $users = $('#users');
+            var $username = $('#username');
+            var $username_form = $('#username_form');
+            var $roomnum = $('#roomnum');
+            var $video_list = $('#video_list');
+            var $rooms = $('#rooms');
+            var $input_select_rooms = $('#input_select_rooms');
+
+
+
+            // Hide Differents Areas
+            $userFormArea.hide();
+            $roomArea.hide();
+            $createRoomArea.hide();
+            $joinRoomArea.hide();
+
+            // Submit create form
+            $createForm.submit(function(e) {
+                e.preventDefault();
+
+                $createOrJoinArea.hide();
+                $createRoomArea.show();
+            });
+
+
+            $joinForm.submit(function(e) {
+                e.preventDefault();
+
+                $createOrJoinArea.hide();
+                $joinRoomArea.show();
+
+                var htmlrooms = '';
+                var htmlrooms_select = ''
+                htmlrooms_select += '<option value="">Seleccionar Sala</option>';
+                for (i = 0; i < rooms_array.length; i++) {
+                    // htmlrooms += '<li style="padding-right: 10em;" class="list-group-item chat-users"><a href="#" onClick="getRoomJoin('+ rooms_array[i] +');">' + rooms_array[i] + '</a></li>';
+                    htmlrooms_select += '<option value="' + rooms_array[i] + '">' + rooms_array[i] + '</option>';
+                }
+                // $rooms.html(htmlrooms);
+                $input_select_rooms.html(htmlrooms_select);
+
+            });
+
+
+
+            // Submit user form
+            $createRoomForm.submit(function(e) {
+                e.preventDefault();
+
+                username = $username.val()
+                socket.emit('new user', $username.val(), function(data) {
+                    // dropRooms.options.add(new Option($username.val()));
+                    if (data) {
+                        $userFormArea.hide();
+                        $createOrJoinArea.hide();
+                        $createRoomForm.hide();
+                        $roomArea.show();
+
+                        // This sets the room number on the client
+                        if ($roomnum.val() != "") {
+                            roomnum = $roomnum.val()
+                        }
+
+                    }
+                });
+                // Join room
+                socket.emit('new room', { room: $roomnum.val(), video: $video_list.val()},  function(data) {
+                    // This should only call back if the client is the host
+                    if (data) {
+                        console.log("Host is syncing the new socket!")
+                        syncVideo(roomnum)
+                    }
+                });
+
+                $username.val('');
+                connection.open($roomnum.val());
+
+
+            });
+
+            // Submit Join Room
+            $joinRoomForm.submit(function(e) {
+
+                if (room_selected != "")
+                {
+                    e.preventDefault();
+
+                    username_form = $username_form.val()
+                    socket.emit('new user', $username_form.val(), function(data) {
+                        if (data) {
+                            $userFormArea.hide();
+                            $createOrJoinArea.hide();
+                            $joinRoomForm.hide();
+                            $roomArea.show();
+
+                            // This sets the room number on the client
+                            if (room_selected != "") {
+                                roomnum = room_selected
+                            }
+
+                        }
+                    });
+                    // Join room
+                    socket.emit('new room', { room: room_selected, video: $video_list.val()}, function(data) {
+                        if (data) {
+                            console.log("Host is syncing the new socket!")
+                            syncVideo(room_selected)
+                        }
+                    });
+
+                    $username_form.val('');
+                    connection.join(room_selected);
+
+                    var vids = $("video"); 
+                    $.each(vids, function(){
+                        this.controls = false; 
+                    }); 
+
+                    var boton_play_pause = document.getElementById('playButton');
+                    boton_play_pause.style.display = "none";
+                }
+                else
+                {
+                    alert("Seleccione Sala");
+                }
+
+            });
+
+
+
+            socket.on('get users', function(data) {
+                var htmlUsers = '';
+                for (i = 0; i < data.length; i++) {
+                    htmlUsers += '<li style="padding-right: 10em;" class="list-group-item chat-users">' + data[i] + '</li>';
+                }
+
+                $users.html(htmlUsers)
+            });
+
+            // Webcam Tools
+            var connection = new RTCMultiConnection();
+            connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
+
+            connection.session = {
+                audio: true,
+                video: true
+            };
+
+            connection.sdpConstraints.mandatory = {
+                OfferToReceiveAudio: true,
+                OfferToReceiveVideo: true
+            };
+
+
+            //Emoji Reaction
+            socket.on('change emoji', function(data) {
+                emoji_socket = document.getElementById('emoji_reaction')
+                emoji_socket.src = data.src;
+            })
+            
+
+        });
+
+
+    </script>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="js/dependencies/jquery.min.js"></script>
+    <script src="js/dependencies/bootstrap.bundle.min.js"></script>
+    <script src="js/dependencies/bootstrap-notify.min.js"></script>
+    <!-- Plugin JavaScript -->
+    <script src="js/dependencies/jquery.easing.min.js"></script>
+    <!-- Libreria RTCConnection -->
+    <script src="https://rtcmulticonnection.herokuapp.com/dist/RTCMultiConnection.min.js"></script>
+    <script src="https://rtcmulticonnection.herokuapp.com/socket.io/socket.io.js"></script>
+    <!-- FaceMocion -->
+    <script src="js/faceMocion.js"></script>
+
+
+    <!-- My JS files -->
+    <script src="js/sync.js"></script>
+    <script src="js/player.js"></script>
+    <script src="js/host.js"></script>
+    <script src="js/seek.js"></script>
+
+    <!-- HTML5 Player -->
+    <script src="js/html5.js"></script>
+
+</body>
+
+</html>
