@@ -178,6 +178,7 @@
         var room_selected = ""
         var $usersJoin = $('#usersJoin');
         rooms_array = []
+        users_array = []
 
         function getRoomJoin(){
             room_selected = document.getElementById('input_select_rooms').value;
@@ -188,6 +189,13 @@
                 rooms_array.push(data[i]);
             }
 
+        });
+
+        socket.on('get users room', function(data) {
+            for (i = 0; i < data.length; i++) {
+                users_array.push(data[i]);
+            }
+            alert(users_array);
         });
 
         function showReactions() {
@@ -245,6 +253,7 @@
                 $createRoomArea.show();
             });
 
+            
 
             $joinForm.submit(function(e) {
                 e.preventDefault();

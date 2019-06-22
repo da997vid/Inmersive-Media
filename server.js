@@ -153,9 +153,9 @@ io.sockets.on('connection', function(socket) {
     });
 
     if ( connections.length > 1) {
-        console.log("   EY!");
         //Update Room List
         updateRoomList(rooms)
+        getUsersConnected(users)
     }
 
 
@@ -226,6 +226,13 @@ io.sockets.on('connection', function(socket) {
         if (rooms.length > 0){
             socket.emit('get rooms', rooms)
             console.log("Emit Rooms: " + rooms)
+        }
+    }
+
+    function getUsersConnected(users) {
+        if (users.length > 0){
+            socket.emit('get users room', users);
+            console.log("Get Users on Room Connected: " + users);
         }
     }
     
