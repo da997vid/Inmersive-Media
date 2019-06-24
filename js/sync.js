@@ -10,13 +10,16 @@ function syncVideo(roomnum) {
     var currTime = 0
     var state
     var videoId = id
+    var volume = 0
 
     currTime = media.currentTime;
+    volume = media.volume;
     state = media.paused;
 
     socket.emit('sync video', {
         room: roomnum,
         time: currTime,
+        volume: volume,
         state: state,
         videoId: videoId
     });
@@ -33,6 +36,9 @@ function seekTo(time) {
     media.play()
 }
 
+function getVolumen() {
+    return media.volume = volume;
+}
 
 
 
@@ -62,13 +68,16 @@ socket.on('syncVideoClient', function(data) {
     var currTime = data.time
     var state = data.state
     var videoId = data.videoId
+    var volume = data.volume
     console.log("current time is: " + currTime)
     console.log("curr vid id: " + id + " " + videoId)
     console.log("state" + state)
+    console.log("volume: " + volume)
 
     // This syncs the time and state
 
     media.currentTime = currTime
+    media.volume = volume
 
     // Sync player state
     // IF parent player was paused

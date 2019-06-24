@@ -25,16 +25,28 @@ function changeVideo() {
             seekOther(roomnum, currTime)
         }
     })
+
+    media.onvolumechange = function() {
+        var volume = media.volume;
+        if (host) {
+            volumeOther(roomnum, volume)
+        }
+    }
 }
-
-
 
 media.addEventListener("seeked", function(e) {
     var currTime = media.currentTime
     if (host) {
         seekOther(roomnum, currTime)
     }
-})
+});
+
+media.onvolumechange = function() {
+    var volume = media.volume;
+    if (host) {
+        volumeOther(roomnum, volume)
+    }
+}
 
 // Play/pause function
 function html5Play() {

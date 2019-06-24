@@ -15,3 +15,15 @@ socket.on('justSeek', function(data) {
     }
 });
 
+function volumeOther(roomnum, volume) {
+    socket.emit('volume other', {
+        room: roomnum,
+        volume: volume
+    });
+}
+
+socket.on('justVolume', function(data) {
+    console.log("Volume Event")
+    volume = data.volume
+    media.volume = volume
+})

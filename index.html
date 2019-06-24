@@ -185,7 +185,6 @@
         function getRoomJoin(){
             room_selected = document.getElementById('input_select_rooms').value;
 
-            // socket.emit('set room selected', room_selected);
         }
 
         socket.on('get rooms', function(data) {

@@ -186,17 +186,28 @@ io.sockets.on('connection', function(socket) {
 
     });
 
+    socket.on('volume other', function(data) {
+        var roomnum = data.room
+        var volume = data.volume
+        socket.broadcast.to("room-" + roomnum).emit('justVolume', {
+            volume: volume
+        });
+
+    });
+
     // Sync video
     socket.on('sync video', function(data) {
         if (io.sockets.adapter.rooms['room-' + socket.roomnum] !== undefined) {
             var roomnum = data.room
             var currTime = data.time
+            var volume = data.volume
             var state = data.state
             var videoId = data.videoId
             var playerId = 0
             
             io.sockets.in("room-" + roomnum).emit('syncVideoClient', {
                 time: currTime,
+                volume: volume,
                 state: state,
                 videoId: videoId,
                 playerId: playerId

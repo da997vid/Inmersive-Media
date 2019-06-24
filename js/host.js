@@ -17,16 +17,12 @@ socket.on('getData', function(data) {
 });
 
 
-
-
 // If user gets disconnected from the host, give warning!
 function disconnected() {
     // boolean to prevent alert on join
     if (notifyfix == false) {
         notifyfix = true
     }
-
-
 }
 
 // Grab all host data
@@ -35,6 +31,5 @@ function getHostData(roomnum) {
         room: roomnum
     });
 }
-
 
 //-----------------------------------------------------------------------------
