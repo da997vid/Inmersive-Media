@@ -162,8 +162,9 @@ io.sockets.on('connection', function(socket) {
     if ( connections.length > 1) {
         //Update Room List
         updateRoomList(rooms);
-        getDataFromRooms(actual_socket_room);
     }
+
+    
 
 
 
@@ -218,6 +219,10 @@ io.sockets.on('connection', function(socket) {
         }
     });
 
+    socket.on('get data from room', function(data) {
+        getDataFromRooms(data);
+    });
+
 
     // New User
     socket.on('new user', function(data, callback) {
@@ -247,17 +252,15 @@ io.sockets.on('connection', function(socket) {
         }
     }
 
-    function getDataFromRooms(roomnum) {
-        if (roomnum.length > 0){
-            var roomUsers = io.sockets.adapter.rooms['room-' + roomnum].users
-            var videoName = io.sockets.adapter.rooms['room-' + roomnum].video
-            socket.emit('get room data', {
-                users: roomUsers,
-                room: roomnum,
-                video: videoName
-            });
-            console.log("Room Data: " + roomnum, roomUsers, videoName);
-        }
+    function getDataFromRooms(room_selected) {
+        var roomUsers = io.sockets.adapter.rooms['room-' + room_selected].users
+        var videoName = io.sockets.adapter.rooms['room-' + room_selected].video
+        socket.emit('get room data', {
+            users: roomUsers,
+            roomSocket: room_selected,
+            video: videoName
+        });
+        console.log("Room Data: " +  room_selected, roomUsers, videoName);
     }
 
     
