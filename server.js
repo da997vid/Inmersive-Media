@@ -13,6 +13,7 @@ userrooms = {}
 // Set given room for url parameter
 var given_room = ""
 var actual_socket_room = ""
+var actual_socket_video = ""
 
 app.use(express.static(__dirname + '/'));
 
@@ -113,6 +114,8 @@ io.sockets.on('connection', function(socket) {
             io.sockets.adapter.rooms['room-' + socket.roomnum].currVideo = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'
             // Keep list of online users
             io.sockets.adapter.rooms['room-' + socket.roomnum].users = [socket.username]
+            //video
+            io.sockets.adapter.rooms['room-' + socket.roomnum].video = socket.video
             
         }
 
@@ -145,6 +148,7 @@ io.sockets.on('connection', function(socket) {
         // Update online users
         updateRoomUsers(socket.roomnum);
         actual_socket_room = socket.roomnum;
+        actual_socket_video = socket.video;
         
 
         //Chat Function
@@ -158,8 +162,7 @@ io.sockets.on('connection', function(socket) {
     if ( connections.length > 1) {
         //Update Room List
         updateRoomList(rooms);
-        console.log("ROOOOOOOOOOOOOM: " + actual_socket_room);
-        getUsersConnected(actual_socket_room);
+        getDataFromRooms(actual_socket_room);
     }
 
 
@@ -244,13 +247,19 @@ io.sockets.on('connection', function(socket) {
         }
     }
 
-    function getUsersConnected(roomnum) {
+    function getDataFromRooms(roomnum) {
         if (roomnum.length > 0){
             var roomUsers = io.sockets.adapter.rooms['room-' + roomnum].users
-            socket.emit('get users room', roomUsers);
-            console.log("Get Users on Room Connected: " + roomUsers);
+            var videoName = io.sockets.adapter.rooms['room-' + roomnum].video
+            socket.emit('get room data', {
+                users: roomUsers,
+                room: roomnum,
+                video: videoName
+            });
+            console.log("Room Data: " + roomnum, roomUsers, videoName);
         }
     }
+
     
 
 })

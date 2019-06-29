@@ -84,6 +84,10 @@
 
                     <select id="input_select_rooms" onchange="getRoomJoin()"></select>
                     <select id="input_users_rooms"></select>
+                    <select id="input_video_rooms"></select>
+                    <div>
+                        <ul id="salas"></ul>
+                    </div>
 
                     <br/>
                     <br/>
@@ -181,6 +185,7 @@
         var $usersJoin = $('#usersJoin');
         rooms_array = []
         users_array = []
+        videos_array = []
 
         function getRoomJoin(){
             room_selected = document.getElementById('input_select_rooms').value;
@@ -191,15 +196,16 @@
             for (i = 0; i < data.length; i++) {
                 rooms_array.push(data[i]);
             }
-
         });
 
-        socket.on('get users room', function(data) {
-            for (i = 0; i < data.length; i++) {
-                users_array.push(data[i]);
+        socket.on('get room data', function(data) {
+            for (i = 0; i < data.users.length; i++) {
+                users_array.push(data.users[i]);
             }
-            alert(users_array);
+            videos_array.push(data.video);
+            
         });
+
 
         function showReactions() {
             document.getElementById('emojis').style.visibility = "visible";
@@ -239,6 +245,8 @@
             var $rooms = $('#rooms');
             var $input_select_rooms = $('#input_select_rooms');
             var $input_users_rooms = $('#input_users_rooms');
+            var $input_video_rooms = $('#input_video_rooms');
+            var $salas = $('#salas');
 
 
 
@@ -264,6 +272,7 @@
                 $createOrJoinArea.hide();
                 $joinRoomArea.show();
 
+                // Recoger datos salas
                 var htmlrooms_select = ''
                 htmlrooms_select += '<option value="">Seleccionar Sala</option>';
                 for (i = 0; i < rooms_array.length; i++) {
@@ -271,12 +280,31 @@
                 }
                 $input_select_rooms.html(htmlrooms_select);
 
+                // Recoger datos usuarios
                 var htmlusers_room = ''
-                htmlusers_room += '<option value="">Uusarios Conectados</option>';
+                htmlusers_room += '<option value="">Usarios Conectados</option>';
                 for (i = 0; i < users_array.length; i++) {
                     htmlusers_room += '<option value="' + users_array[i] + '">' + users_array[i] + '</option>';
                 }
                 $input_users_rooms.html(htmlusers_room);
+
+                // Recoger datos Videos
+                var htmlvideos_room = ''
+                htmlvideos_room += '<option value="">Video Reproducido</option>';
+                for (i = 0; i < users_array.length; i++) {
+                    htmlvideos_room += '<option value="' + videos_array[i] + '">' + videos_array[i] + '</option>';
+                }
+                $input_video_rooms.html(htmlvideos_room);
+
+                var html_salas_users = ''
+                var html_salas_video = ''
+                for (i = 0; i < users_array.length; i++) {
+                    html_salas_users += '<li>' + users_array[i] + '</li>';
+                }
+                for (i = 0; i < users_array.length; i++) {
+                    html_salas_video += '<li>' + videos_array[i] + '</li>';
+                }
+                $salas.html(html_salas_users, html_salas_video);
 
             });
 
