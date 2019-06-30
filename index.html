@@ -85,9 +85,6 @@
                     <select id="input_select_rooms" onchange="getRoomJoin()"></select>
                     <select id="input_users_rooms"></select>
                     <select id="input_video_rooms"></select>
-                    <div>
-                        <ul id="salas"></ul>
-                    </div>
 
                     <br/>
                     <br/>
@@ -183,16 +180,14 @@
         var username_form = ""
         var room_selected = ""
         var $usersJoin = $('#usersJoin');
+        
         rooms_array = []
-        users_array = []
-        videos_array = []
         room_object = {}
+        var $input_users_rooms = $('#input_users_rooms');
+        var $input_video_rooms = $('#input_video_rooms');
+        input_users_rooms.style.display = "none";
+        input_video_rooms.style.display = "none";
 
-        function getRoomJoin(){
-            room_selected = document.getElementById('input_select_rooms').value;
-
-            socket.emit('get data from room', room_selected);
-        }
 
         socket.on('get rooms', function(data) {
             for (i = 0; i < data.length; i++) {
@@ -200,15 +195,40 @@
             }
         });
 
-        socket.on('get room data', function(data) {
+        // Funciones para recoger los valores de las salas
+        function getRoomJoin(){
+            room_selected = document.getElementById('input_select_rooms').value;
+            
+            socket.emit('get data from room', room_selected);
+        }
+
+        socket.on('set room data', function(data) {
             room_object["room"] = data.roomSocket;
+            users_array = []
             for (j = 0; j < data.users.length; j++) {
-                room_object["users"] = data.users[i];
+                users_array.push(data.users[j]);
             }
             room_object["video"] = data.video;
+            setDataRoomOnSelects(room_object, users_array);
         });
 
+        function setDataRoomOnSelects(object_socket, usersArray){
+            input_users_rooms.style.display = "block";
+            input_video_rooms.style.display = "block";
+            var htmlusers_room = ''         
 
+            for (i = 0; i < usersArray.length; i++) {
+                htmlusers_room += '<option value="' + usersArray[i] + '">' + usersArray[i] + '</option>';
+            }
+            $input_users_rooms.html(htmlusers_room);
+
+            // Recoger datos Videos
+            var htmlvideos_room = ''
+            htmlvideos_room += '<option value="' + object_socket["video"] + '">' + object_socket["video"] + '</option>';
+            $input_video_rooms.html(htmlvideos_room);
+        }
+
+        // Funciones de Compartir Emociones/Reacciones
         function showReactions() {
             document.getElementById('emojis').style.visibility = "visible";
         }
@@ -245,9 +265,7 @@
             var $roomnum = $('#roomnum');
             var $video_list = $('#video_list');
             var $input_select_rooms = $('#input_select_rooms');
-            // var $input_users_rooms = $('#input_users_rooms');
-            // var $input_video_rooms = $('#input_video_rooms');
-            var $salas = $('#salas');
+            
 
 
 
@@ -280,35 +298,6 @@
                     htmlrooms_select += '<option value="' + rooms_array[i] + '">' + rooms_array[i] + '</option>';
                 }
                 $input_select_rooms.html(htmlrooms_select);
-
-                // Recoger datos usuarios
-                // var htmlusers_room = ''
-                // htmlusers_room += '<option value="">Usarios Conectados</option>';
-                // for (i = 0; i < users_array.length; i++) {
-                //     htmlusers_room += '<option value="' + users_array[i] + '">' + users_array[i] + '</option>';
-                // }
-                // $input_users_rooms.html(htmlusers_room);
-
-                // // Recoger datos Videos
-                // var htmlvideos_room = ''
-                // htmlvideos_room += '<option value="">Video Reproducido</option>';
-                // for (i = 0; i < users_array.length; i++) {
-                //     htmlvideos_room += '<option value="' + videos_array[i] + '">' + videos_array[i] + '</option>';
-                // }
-                // $input_video_rooms.html(htmlvideos_room);
-
-                // var html_salas_users = ''
-                // var html_salas_video = ''
-                // for (i = 0; i < users_array.length; i++) {
-                //     html_salas_users += '<li>' + users_array[i] + '</li>';
-                // }
-                // for (i = 0; i < users_array.length; i++) {
-                //     html_salas_video += '<li>' + videos_array[i] + '</li>';
-                // }
-                // $salas.html(html_salas_users, html_salas_video);
-
-                
-
             });
 
 

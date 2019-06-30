@@ -255,14 +255,12 @@ io.sockets.on('connection', function(socket) {
     function getDataFromRooms(room_selected) {
         var roomUsers = io.sockets.adapter.rooms['room-' + room_selected].users
         var videoName = io.sockets.adapter.rooms['room-' + room_selected].video
-        socket.emit('get room data', {
+        socket.emit('set room data', {
             users: roomUsers,
             roomSocket: room_selected,
             video: videoName
         });
         console.log("Room Data: " +  room_selected, roomUsers, videoName);
     }
-
-    
 
 })
