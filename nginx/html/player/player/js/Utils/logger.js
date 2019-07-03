@@ -56,6 +56,7 @@ var StatElements = function ()
 
 	this.viewLon = position.longitud;
 	this.viewLat = position.latitud;
+	alert(this.viewLon);
 	
 	this.viewX = view.x;
 	this.viewY = view.y;
