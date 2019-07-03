@@ -1,0 +1,42 @@
+{
+  "title": "MTAILS",
+  "contents": [
+  {
+    "name": "Opera 360º Remote",
+    "thumbnail": "img/opera.png",
+    "url": "http://84.88.32.46/imac_content/pilot_1/OPERALICEU_01/stream.mpd",
+    "audioChannels": 4
+  },
+  
+  {
+    "name": "I Philip 360º Remote",
+    "thumbnail": "img/iPhilip.jpg",
+    "url": "http://84.88.32.46/imac_content/pilot_1/RBB_Iphilip/stream.mpd",
+    "audioChannels": 2
+  },
+
+  {
+    "name": "Video 1: Nature 360 Single",
+    "thumbnail": "img/i2CAT.jpg",
+    "url": "./resources/MTAILS/Nature_360/nature_stream_hd.mpd",
+    "audioChannels": 2
+  }, 
+  {
+    "name": "Video 2: Nature 360 Multi",
+    "thumbnail": "img/i2CAT.jpg",
+    "url": "./resources/MTAILS/Nature_360/stream.mpd",
+    "audioChannels": 2
+  },
+  {
+    "name": "Video 3: Tears of steel TV Single",
+    "thumbnail": "img/i2CAT.jpg",
+    "url": "./resources/MTAILS/Tears_of_steel_TV/tears_stream_hd.mpd",
+    "audioChannels": 2
+  }, 
+  {
+    "name": "Video 4: Tears of steel TV Multi",
+    "thumbnail": "img/i2CAT.jpg",
+    "url": "./resources/MTAILS/Tears_of_steel_TV/stream.mpd",
+    "audioChannels": 2
+  }]
+}

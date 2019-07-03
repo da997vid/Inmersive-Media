@@ -1,0 +1,18 @@
+{
+  "title": "ImAc",
+  "contents": [
+  {
+    "name": "1: Auroras 6:5",
+    "thumbnail": "img/LOGO-IMAC.png",
+    "url": "http://192.168.10.128:8080/cube_content/auroras/output3.mkv",
+    "audioChannels": 2,
+    "projection": "CMP_65"
+  },
+  {
+    "name": "2: Auroras 11:6",
+    "thumbnail": "img/LOGO-IMAC.png",
+    "url": "http://192.168.10.128:8080/cube_content/auroras/116.mkv",
+    "audioChannels": 2,
+    "projection": "CMP_116"
+  }]
+}
