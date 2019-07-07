@@ -65,7 +65,7 @@
                     <br/>
                     <br/>
                     <br/>
-                    <input style="margin-top: 10px;" type="submit" class="btn btn-primary" value="Create Room"/>
+                    <input style="margin-top: 10px;" type="submit" id="submit_create" class="btn btn-primary" value="Create Room" onclick="setUrlVideo()"/>
                 </form>
             </div>
         </div>
@@ -187,6 +187,10 @@
         var $input_video_rooms = $('#input_video_rooms');
         input_users_rooms.style.display = "none";
         input_video_rooms.style.display = "none";
+
+        function setUrlVideo() {
+            window.location = "/player/player/#0";
+        }
 
 
         socket.on('get rooms', function(data) {
@@ -339,7 +343,6 @@
 
             // Submit Join Room
             $joinRoomForm.submit(function(e) {
-
                 if (room_selected != "")
                 {
                     e.preventDefault();
@@ -383,6 +386,7 @@
                     alert("Seleccione Sala");
                 }
 
+            
             });
 
 
