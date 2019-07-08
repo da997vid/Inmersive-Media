@@ -17,7 +17,7 @@ var actual_socket_video = ""
 
 app.use(express.static(__dirname + '/'));
 
-server.listen(process.env.PORT || 3000);
+server.listen(3000, '192.168.56.1');
 console.log('Server Started . . .');
 
 app.get('/:room', function(req, res) {

@@ -3,3 +3,4 @@ index_old.html
 app-env
 nginx/logs/access.log
 nginx/logs/error.log
+nginx/logs/nginx.pid
