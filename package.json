@@ -14,7 +14,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.4",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.21",
     "rtcmulticonnection": "^3.6.8",
     "socket.io": "^2.2.0",
     "wrtc": "^0.4.0-beta1"
