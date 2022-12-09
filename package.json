@@ -13,7 +13,7 @@
   "author": "Kyle Lim",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.16.4",
+    "express": "^4.18.2",
     "lodash": "^4.17.11",
     "rtcmulticonnection": "^3.6.8",
     "socket.io": "^2.2.0",
